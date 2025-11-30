@@ -1,0 +1,24 @@
+{
+	"name": "trigger1schedule",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_dynamic_load_GetMetaData",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 2,
+				"startTime": "2025-11-29T22:28:00",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}
