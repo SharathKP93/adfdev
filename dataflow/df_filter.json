@@ -1,5 +1,5 @@
 {
-	"name": "df_append",
+	"name": "df_filter",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
