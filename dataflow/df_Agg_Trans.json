@@ -1,0 +1,76 @@
+{
+	"name": "df_Agg_Trans",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_empdept_source",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText2",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "filter1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EmpID as integer,",
+				"          EmpName as string,",
+				"          Gender as string,",
+				"          DOJ as string,",
+				"          DeptID as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('hash', 1)) ~> source1",
+				"source1 derive(AddDays =  addDays(toDate(DOJ,'dd/MM/yyyy','en-US'),-5)) ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          EMPLOYEEID = EmpID,",
+				"          EmpName,",
+				"          Gender,",
+				"          DOJ,",
+				"          AddDays",
+				"     ),",
+				"     partitionBy('hash', 1),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 filter(substring(EmpName,1,4)=='Hari') ~> filter1",
+				"filter1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CourseID as string,",
+				"          CourseName as string,",
+				"          StudentID as string",
+				"     ),",
+				"     partitionFileNames:['Deri_Filter.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}
