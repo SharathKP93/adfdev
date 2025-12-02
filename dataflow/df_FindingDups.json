@@ -1,0 +1,86 @@
+{
+	"name": "df_FindingDups",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_Empdups",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_df_output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_df_output",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "split1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EmployeeID as string,",
+				"          EmployeeName as string,",
+				"          Employeeadress as string,",
+				"          EmpPh as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 aggregate(groupBy(EmployeeID,",
+				"          EmployeeName,",
+				"          Employeeadress),",
+				"     Counts = count(EmployeeID)) ~> aggregate1",
+				"aggregate1 split(Counts>1,",
+				"     disjoint: false) ~> split1@(DuplicateRecords, ValidRecords)",
+				"split1@DuplicateRecords sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CourseID as string,",
+				"          CourseName as string,",
+				"          StudentID as string",
+				"     ),",
+				"     partitionFileNames:['InvalidRecord.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1",
+				"split1@ValidRecords sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CourseID as string,",
+				"          CourseName as string,",
+				"          StudentID as string",
+				"     ),",
+				"     partitionFileNames:['ValidRecords.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink2"
+			]
+		}
+	}
+}
