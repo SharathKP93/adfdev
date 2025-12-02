@@ -1,0 +1,41 @@
+{
+	"name": "ds_SalesEurope",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adlsgen2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Sales_Europe.csv",
+				"folderPath": "Union",
+				"fileSystem": "input"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "SalesDate",
+				"type": "String"
+			},
+			{
+				"name": "ProductID",
+				"type": "String"
+			},
+			{
+				"name": "QuantitySold",
+				"type": "String"
+			},
+			{
+				"name": "Revenue",
+				"type": "String"
+			}
+		]
+	}
+}

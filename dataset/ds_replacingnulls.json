@@ -1,0 +1,44 @@
+{
+	"name": "ds_replacingnulls",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adlsgen2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "SalesOrder_Nulls.csv",
+				"fileSystem": "input"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "salesorderID",
+				"type": "String"
+			},
+			{
+				"name": "ProductName",
+				"type": "String"
+			},
+			{
+				"name": "CustomerID",
+				"type": "String"
+			},
+			{
+				"name": "salesAmount",
+				"type": "String"
+			},
+			{
+				"name": "Quantity ",
+				"type": "String"
+			}
+		]
+	}
+}
