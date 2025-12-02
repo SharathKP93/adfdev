@@ -1,0 +1,59 @@
+{
+	"name": "df_Replacingnulls",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_replacingnulls",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_df_output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          salesorderID as string,",
+				"          ProductName as string,",
+				"          CustomerID as string,",
+				"          salesAmount as string,",
+				"          {Quantity } as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(salesorderID = iifNull(salesorderID,'9999',salesorderID),",
+				"          ProductName = iifNull(ProductName,'UNNOWN',ProductName)) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CourseID as string,",
+				"          CourseName as string,",
+				"          StudentID as string",
+				"     ),",
+				"     partitionFileNames:['Replacinfnulls.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}
