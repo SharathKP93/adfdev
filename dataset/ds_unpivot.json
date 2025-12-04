@@ -1,0 +1,48 @@
+{
+	"name": "ds_unpivot",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adlsgen2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Sales_Unpivot.csv",
+				"fileSystem": "input"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Year",
+				"type": "String"
+			},
+			{
+				"name": "Jan1",
+				"type": "String"
+			},
+			{
+				"name": "Feb2",
+				"type": "String"
+			},
+			{
+				"name": "Mar",
+				"type": "String"
+			},
+			{
+				"name": "Feb4",
+				"type": "String"
+			},
+			{
+				"name": "Jan5",
+				"type": "String"
+			}
+		]
+	}
+}
