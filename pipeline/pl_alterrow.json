@@ -1,9 +1,9 @@
 {
-	"name": "pl_deriv_other_default",
+	"name": "pl_alterrow",
 	"properties": {
 		"activities": [
 			{
-				"name": "df_conditionalsplit",
+				"name": "df_alterrow",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_conditionalsplit_deriv_other_default",
+						"referenceName": "df_alterrow",
 						"type": "DataFlowReference"
 					},
 					"compute": {
