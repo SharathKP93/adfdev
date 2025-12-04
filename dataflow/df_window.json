@@ -1,0 +1,75 @@
+{
+	"name": "df_window",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_window",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_df_output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "window1"
+				},
+				{
+					"name": "rank1"
+				},
+				{
+					"name": "rank2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMPLOYEEID as string,",
+				"          EMPLOYEENAME as string,",
+				"          EMPLOYEEDOJ as string,",
+				"          EMPLOYEEDEPARTMENT as string,",
+				"          EMPLOYEESALARY as integer,",
+				"          GENDER as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 window(over(EMPLOYEEDEPARTMENT),",
+				"     asc(EMPLOYEEDEPARTMENT, true),",
+				"     TotalSalary = sum(EMPLOYEESALARY),",
+				"          MinSalary = min(EMPLOYEESALARY),",
+				"          Count = count(EMPLOYEESALARY),",
+				"          RowNumber = rowNumber()) ~> window1",
+				"window1 rank(asc(EMPLOYEEDEPARTMENT, true),",
+				"     output(Rank as long)) ~> rank1",
+				"rank1 rank(asc(EMPLOYEEDEPARTMENT, true),",
+				"     output(DenseRankk as long),",
+				"     dense: true) ~> rank2",
+				"rank2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CourseID as string,",
+				"          CourseName as string,",
+				"          StudentID as string",
+				"     ),",
+				"     partitionFileNames:['Windowfunctions.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}
