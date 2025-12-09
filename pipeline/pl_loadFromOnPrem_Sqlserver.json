@@ -200,7 +200,7 @@
 												},
 												"Watermark_Value": {
 													"value": {
-														"value": "@activity('Lookup2').output.value[0].watermark_value",
+														"value": "@activity('Lookup2').output.value[0].watermark_value\n",
 														"type": "Expression"
 													},
 													"type": "String"
