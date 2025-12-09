@@ -1,0 +1,16 @@
+{
+	"name": "ls_SqlServer_OnPrem",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=False;data source=SHARATHKP;initial catalog=TEST_DB_SUPPLYCHAIN;user id=sharathsqlexpress",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI2M2MyMTM4Ni1mOWRjLTRmZWQtODUzNS0wYWEyZWQ4NzdiN2UiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "selfhostedintegrationRuntime1",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
