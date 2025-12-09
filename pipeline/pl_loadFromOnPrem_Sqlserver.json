@@ -77,18 +77,8 @@
 												"partitionOption": "None"
 											},
 											"dataset": {
-												"referenceName": "ds_OnPrem",
-												"type": "DatasetReference",
-												"parameters": {
-													"Schema": {
-														"value": "@item().Source_Object_Schema",
-														"type": "Expression"
-													},
-													"TableName": {
-														"value": "@item().Source_Object_Name",
-														"type": "Expression"
-													}
-												}
+												"referenceName": "ds_SqlServerTable1",
+												"type": "DatasetReference"
 											}
 										}
 									},
@@ -114,7 +104,6 @@
 										"typeProperties": {
 											"source": {
 												"type": "SqlServerSource",
-												"sqlReaderQuery": "@concat('Select * from ' ,item().Source_Object_Schema,'.',item().Source_Object_Name,' where ',item().watermark_column,'>',item().watermark_value)",
 												"queryTimeout": "02:00:00",
 												"partitionOption": "None"
 											},
@@ -141,12 +130,8 @@
 										},
 										"inputs": [
 											{
-												"referenceName": "ds_OnPrem",
-												"type": "DatasetReference",
-												"parameters": {
-													"Schema": " @item().Source_Object_Schema",
-													"TableName": " @item().Source_Object_Name"
-												}
+												"referenceName": "ds_SqlServerTable1",
+												"type": "DatasetReference"
 											}
 										],
 										"outputs": [
