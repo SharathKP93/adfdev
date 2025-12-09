@@ -161,6 +161,56 @@
 												}
 											}
 										]
+									},
+									{
+										"name": "Stored procedure1",
+										"type": "SqlServerStoredProcedure",
+										"dependsOn": [
+											{
+												"activity": "Copy data1",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"storedProcedureName": "[dbo].[sp_UpdateWatermark]",
+											"storedProcedureParameters": {
+												"Source_Object_Name": {
+													"value": {
+														"value": "@item().Source_Object_Name",
+														"type": "Expression"
+													},
+													"type": "String"
+												},
+												"Watermark_Column": {
+													"value": {
+														"value": "@item().Watermark_Column",
+														"type": "Expression"
+													},
+													"type": "String"
+												},
+												"Watermark_Value": {
+													"value": {
+														"value": "@activity('Lookup2').output.value[0].watermark_value",
+														"type": "Expression"
+													},
+													"type": "String"
+												}
+											}
+										},
+										"linkedServiceName": {
+											"referenceName": "ls_AzureSql",
+											"type": "LinkedServiceReference"
+										}
 									}
 								]
 							}
