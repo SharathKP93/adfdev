@@ -78,7 +78,17 @@
 											},
 											"dataset": {
 												"referenceName": "ds_SqlServerTable1",
-												"type": "DatasetReference"
+												"type": "DatasetReference",
+												"parameters": {
+													"Source_Object_Schema": {
+														"value": "@item().Source_Object_Schema",
+														"type": "Expression"
+													},
+													"Source_Object_Name": {
+														"value": "@item().Source_Object_Name",
+														"type": "Expression"
+													}
+												}
 											}
 										}
 									},
@@ -104,6 +114,7 @@
 										"typeProperties": {
 											"source": {
 												"type": "SqlServerSource",
+												"sqlReaderQuery": "@concat('Select * from ' ,item().Source_Object_Schema,'.',item().Source_Object_Name,' where ',item().watermark_column,'>',item().watermark_value)",
 												"queryTimeout": "02:00:00",
 												"partitionOption": "None"
 											},
@@ -131,7 +142,17 @@
 										"inputs": [
 											{
 												"referenceName": "ds_SqlServerTable1",
-												"type": "DatasetReference"
+												"type": "DatasetReference",
+												"parameters": {
+													"Source_Object_Schema": {
+														"value": "@item().Source_Object_Schema",
+														"type": "Expression"
+													},
+													"Source_Object_Name": {
+														"value": "@item().Source_Object_Name",
+														"type": "Expression"
+													}
+												}
 											}
 										],
 										"outputs": [
