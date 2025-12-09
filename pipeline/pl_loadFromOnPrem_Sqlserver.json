@@ -72,14 +72,95 @@
 										"typeProperties": {
 											"source": {
 												"type": "SqlServerSource",
+												"sqlReaderQuery": "@if(equals(toLower(item().Load_Type), 'incremental'), concat('SELECT MAX(', item().Watermark_column, ') AS Watermark_Value FROM [', item().Source_Object_Schema, '].', item().Source_Object_Name), 'SELECT NULL AS Watermark_Value')",
 												"queryTimeout": "02:00:00",
 												"partitionOption": "None"
 											},
 											"dataset": {
 												"referenceName": "ds_OnPrem",
-												"type": "DatasetReference"
+												"type": "DatasetReference",
+												"parameters": {
+													"Schema": {
+														"value": "@item().Source_Object_Schema",
+														"type": "Expression"
+													},
+													"TableName": {
+														"value": "@item().Source_Object_Name",
+														"type": "Expression"
+													}
+												}
 											}
 										}
+									},
+									{
+										"name": "Copy data1",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "Lookup2",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "SqlServerSource",
+												"sqlReaderQuery": "@concat('Select * from ' ,item().Source_Object_Schema,'.',item().Source_Object_Name,' where ',item().watermark_column,'>',item().watermark_value)",
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "DelimitedTextSink",
+												"storeSettings": {
+													"type": "AzureBlobFSWriteSettings"
+												},
+												"formatSettings": {
+													"type": "DelimitedTextWriteSettings",
+													"quoteAllText": true,
+													"fileExtension": ".txt"
+												}
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_OnPrem",
+												"type": "DatasetReference",
+												"parameters": {
+													"Schema": " @item().Source_Object_Schema",
+													"TableName": " @item().Source_Object_Name"
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "ds_dynamic",
+												"type": "DatasetReference",
+												"parameters": {
+													"Target_Object_Name": {
+														"value": "@concat(item().Target_Object_Name,'.csv')",
+														"type": "Expression"
+													}
+												}
+											}
+										]
 									}
 								]
 							}
